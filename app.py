@@ -7,6 +7,7 @@ from flask import Flask, redirect, url_for, render_template, request, session
 import json
 import sys
 import os
+from scripts.nocache import nocache
 
 
 app = Flask(__name__)
@@ -15,6 +16,7 @@ app = Flask(__name__)
 # ======== Routing =========================================================== #
 # -------- Login ------------------------------------------------------------- #
 @app.route('/', methods=['GET', 'POST'])
+@nocache
 def login():
     if not session.get('logged_in'):
         form = forms.LoginForm(request.form)
@@ -34,6 +36,7 @@ def login():
 
 
 @app.route("/logout")
+@nocache
 def logout():
     session['logged_in'] = False
     return redirect(url_for('login'))
@@ -41,6 +44,7 @@ def logout():
 
 # -------- Signup ---------------------------------------------------------- #
 @app.route('/signup', methods=['GET', 'POST'])
+@nocache
 def signup():
     if not session.get('logged_in'):
         form = forms.LoginForm(request.form)
@@ -62,6 +66,7 @@ def signup():
 
 # -------- Settings ---------------------------------------------------------- #
 @app.route('/settings', methods=['GET', 'POST'])
+@nocache
 def settings():
     if session.get('logged_in'):
         if request.method == 'POST':
